@@ -1,6 +1,6 @@
 - infos =
 - infos/author = Markus Raab <elektra@libelektra.org>
-- infos/status = experimental maintained
+- infos/status = maintained
 - infos/provides =
 - infos/description =
 
@@ -87,6 +87,31 @@ including the following maven dependency in your project afterwards:
 <artifactId>libelektra4j</artifactId>
 <version>*version*</version>
 ```
+
+If you wish to make the jna bindings part of your project, copy _version_.jar file to some location within your project, for example,
+to `libs` directory in the project root. Then add to your pom.xml the following element as child of the `<dependencies>` element.
+
+```xml
+<dependency>
+	<groupId>org.libelektra</groupId>
+	<artifactId>libelektra4j</artifactId>
+	<version>*version*</version>
+	<scope>system</scope>
+	<systemPath>${basedir}/libs/libelektra4j-*version*.jar</systemPath>
+</dependency>
+```
+
+Most likely, you have to include this dependency as well:
+
+```xml
+<dependency>
+     <groupId>net.java.dev.jna</groupId>
+     <artifactId>jna</artifactId>
+     <version>4.5.0</version>
+ </dependency>
+```
+
+[here](../../examples/external/java/read-keys-example/pom.xml) you can find a fully working example of the pom file.
 
 ## Testing
 

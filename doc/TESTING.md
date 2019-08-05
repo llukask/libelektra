@@ -50,6 +50,15 @@ The alternative to `make run_nokdbtests`:
 ctest -T Test --output-on-failure -LE kdbtests -j 6
 ```
 
+## Required Environment
+
+To run the tests successfully, the environment
+must fulfill:
+
+- Mounted /dev and /proc (to have stdin and stdout for import & export test cases).
+- POSIX tools need to be available (including the `file` tool)
+- User must be able to write to system and spec (see below)
+
 If the access is denied, several tests will fail.
 You have some options to avoid running them as root:
 
@@ -84,9 +93,23 @@ You have some options to avoid running them as root:
 3. Compile Elektra so that system paths are not actual system paths, e.g. to write everything into
    the home directory (`~`) use cmake options:
    `-DKDB_DB_SYSTEM="~/.config/kdb/system" -DKDB_DB_SPEC="~/.config/kdb/spec"`
-   (for another example with ini see `scripts/configure-home`)
+   (for an example of a full CMake invocation see `scripts/configure-home`)
 4. Use the XDG resolver (see `scripts/configure-xdg`) and set
    the environment variable `XDG_CONFIG_DIRS`, currently lacks `spec` namespaces, see #734.
+
+## Manual Testing
+
+Running executables in the build directory needs some preparation.
+Here we assume that `build` is the build directory and it is the
+top-level of Elektra's source code:
+
+```
+cd build
+. ../scripts/run_dev_env
+```
+
+After sourcing `run_dev_env`, you can directly execute `kdb` and other
+binaries built with Elektra (such as the examples).
 
 ## Recommended Environment
 
@@ -96,7 +119,6 @@ _all_ tests (also those that are mostly designed for internal development)
 you need to fulfil:
 
 - Elektra must be installed (for gen + external test cases).
-- Mounted /dev (to have stdin and stdout for import & export test cases).
 - A running dbus daemon (Either "system" or "session" daemon).
 - `gpg2` or `gpg` binary must be available.
 
@@ -442,7 +464,7 @@ make coverage-genhtml
 
 The HTML files can be found in the build directory in the folder `coverage`.
 
-## See also
+## See Also
 
 - [COMPILE](COMPILE.md).
 - [INSTALL](INSTALL.md).

@@ -157,14 +157,8 @@ In the error description you should see something like:
 The command ./bin/kdb mount terminated unsuccessfully with the info:
 The provided plugin configuration is not valid!
 Errors/Warnings during the check were:
-Sorry, the error (#130) occurred!
-Description: the configuration is invalid or incomplete.
-Ingroup: plugin
-Module: crypto
-At: /Users/pnirschl/Projects/libelektra/src/plugins/crypto/gpg.c:512
-Reason: Missing GPG key (specified as encrypt/key) in plugin configuration. Available key IDs are: B815F1334CF4F830187A784256CFA3A5C54DF8E4,847378ABCF0A552B48082A80C52E8E92F785163F
-Mountpoint:
-Configfile:
+Sorry, module crypto issued the error 130:
+the configuration is invalid or incomplete: Missing GPG key (specified as encrypt/key) in plugin configuration. Available key IDs are: B815F1334CF4F830187A784256CFA3A5C54DF8E4,847378ABCF0A552B48082A80C52E8E92F785163F
 Please report the issue at https://issues.libelektra.org/
 ```
 
@@ -210,7 +204,7 @@ Shutdown is enabled in the unit tests to prevent memory leaks.
 
 ## Technical Details
 
-### Ciphers and Mode Of Operation
+### Ciphers and Mode of Operation
 
 All of the plugin variants use the Advanced Encryption Standard (AES) in Cipher Block Chaining Mode (CBC) with a key size of 256 bit.
 

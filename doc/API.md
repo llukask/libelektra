@@ -72,6 +72,7 @@ Read about [compiling elektra](/doc/COMPILE.md).
 - [Merge](/doc/tutorials/merge.md)
 - [Namespaces](/doc/tutorials/namespaces.md)
 - [Plugins](/doc/tutorials/plugins.md)
+- [Java Plugins](/doc/tutorials/java-plugins.md)
 
 [List of all available Plugins](/src/plugins/) and get started by developing
 your own plugins @ref plugin.
@@ -201,7 +202,7 @@ and then lookup details in the API description in @ref plugin.
 
 Read more about [mounting](/doc/help/elektra-mounting.md)
 
-## SEE ALSO
+## See Also
 
 - See [elektra-glossary(7)](/doc/help/elektra-glossary.md)
 - More information about [elektra-backends(7)](/doc/help/elektra-backends.md)
