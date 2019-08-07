@@ -55,12 +55,8 @@ will print an error message on the first usage:
 
 ```sh
 kdb ls system/hosts
-#> The command ls terminated unsuccessfully with the info: Error (#85) occurred!
-#> Description: an Augeas error occurred
-#> Ingroup: plugin
-#> Module: storage
-#> At: /path/augeas.c:166
-#> Reason: Lens not found
+#> Sorry, module storage issued the error 85:
+#> an Augeas error occurred: Lens not found
 ```
 
 This happens because the plugin does not know which lens it should use to read and write the configuration.
@@ -68,7 +64,7 @@ For that reason, the lens configuration option was supplied together with the mo
 
 ## Restrictions
 
-### Inner node values
+### Inner Node Values
 
 Currently no Augeas lens supports values for inner nodes.
 Unfortunately no validation plugin exists yet that would prevent such modifications early:
@@ -77,15 +73,14 @@ Unfortunately no validation plugin exists yet that would prevent such modificati
 kdb set system/hosts/1 somevalue
 #> The command set terminated unsuccessfully with the info: Error (#85) occurred!
 #> Description: an Augeas error occurred
-#> Ingroup: plugin
 #> Module: storage
 #> At: /path/augeas.c:166
-#> Reason: Malformed child node '1'
+#> an Augeas error occurred: Malformed child node '1'
 ```
 
 The operation simply fails with an undescriptive error.
 
-### Leaky abstraction of order
+### Leaky Abstraction of Order
 
 Most Augeas lenses require subtrees to be in a specific order. For example the hosts lens requires the ipaddr node
 of an entry to precede the canonical node. Unfortunately the Augeas storage plugin has no knowledge about this required
@@ -108,11 +103,8 @@ kdbSet system/hosts
 This fails with an error similar to this
 
 ```
-Description: an Augeas error occurred
-Ingroup: plugin
-Module: storage
-At: /path/augeas.c:179
-Reason: Failed to match
+Sorry, module storage issued the error 85:
+an Augeas error occurred: Failed to match
 some augeas match expression
 with tree
 { \"canonical\" = \"newhost\" } { \"ipaddr\" = \"14.14.14.14\" }

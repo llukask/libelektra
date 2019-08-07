@@ -170,7 +170,7 @@ in C++). It _must not_ return to the calling function.
 The handler will also be called whenever you pass `NULL` where a function expects an `ElektraError **`. In this case the error code will be
 `ELEKTRA_ERROR_CODE_NULL_ERROR`.
 
-The default callback simply logs the error with `ELEKTRA_LOG_DEBUG` and then calls `exit()` with the error code of the error. It is expected
+The default callback simply logs the error with `ELEKTRA_LOG_DEBUG` and then calls `exit()` with exit code `EXIT_FAILURE` It is expected
 that you implement your own callback, so that you get proper error message logged in your applications preferred format. Using the default
 callback is only viable for very simple applications, because you won't get any indication as to which key caused the error (unless you
 compiled Elektra with debug logging enabled).
@@ -203,7 +203,7 @@ but, if you ever do need to use the raw type metadata using constants enables co
 There is also the type `enum` with constant `KDB_TYPE_ENUM`. It is currently neither used nor supported by this API. However, we reserve it
 for a future expansion of this API.
 
-##### Note about floating point types
+##### Note about Floating Point Types
 
 We enforce a few minimum properties for floating point types. They are taken from the IEE-754 specification and are:
 

@@ -242,7 +242,7 @@ So usually you would have:
 if (DEPENDENCY_PHASE)
 	find_package (LibXml2 QUIET)
 	if (LIBXML2_FOUND)
-		# add testdata, testcases...
+		# add testdata, test cases...
 	else ()
 		remove_plugin (xmltool "libxml2 not found")
 	endif ()
@@ -340,7 +340,7 @@ Basically the implementation of `elektraLineSet` can be described with the follo
 // open the file
 if (error)
 {
-	ELEKTRA_SET_ERROR(74, parentKey, keyString(parentKey));
+	ELEKTRA_SET_RESOURCE_ERROR(parentKey, keyString(parentKey));
 }
 for (/* each key */)
 {
@@ -404,8 +404,8 @@ int elektraLineCheckConfig (Key * errorKey, KeySet * conf)
 		const char * value = keyString (cur);
 		if (strlen (value) > 3)
 		{
-			ELEKTRA_SET_ERRORF (ELEKTRA_ERROR_VALUE_LENGTH, errorKey,
-					    "value %s is more than 3 characters long",
+			ELEKTRA_SET_VALIDATION_SYNTACTIC_ERRORF ( errorKey,
+					    "Value '%s' is more than 3 characters long",
 					    value);
 			return -1; // The configuration was not OK and could not be fixed
 		}
@@ -414,9 +414,19 @@ int elektraLineCheckConfig (Key * errorKey, KeySet * conf)
 }
 ```
 
+The `elektraPluginCheckConf` function is exported via the plugin's contract. The following example demonstrates how to export the `checkconf` function (see section [Contract](#contract) for further details):
+
+```c
+keyNew ("system/elektra/modules/" ELEKTRA_PLUGIN_NAME "/exports/checkconf", KEY_FUNC, elektraLineCheckConfig, KEY_END),
+```
+
+Within the `checkconf` function all of the plugin configuration values should be validated.
+Errors should be reported via Elektra's error handling mechanism (see section [ELEKTRA_SET_ERROR](#elektra_set_error) for further details).
+If `checkconf` encounters a configuration value, that is not strictly invalid but can not be parsed by the plugin (e.g. a parameter which is not part of the plugin configuration), then a warning should be appended to `errorKey`, using `ELEKTRA_ADD_WARNING`.
+
 ### `ELEKTRA_PLUGIN_EXPORT`
 
-The last function, one that is always needed in a plugin, is `ELEKTRA_PLUGIN_EXPORT`. This functions is responsible for letting Elektra know that
+A function that is always needed in a plugin, is `ELEKTRA_PLUGIN_EXPORT`. This functions is responsible for letting Elektra know that
 the plugin exists and which methods it implements. The code from the line plugin is a good example and pretty self-explanatory:
 
 ```c
@@ -430,6 +440,16 @@ Plugin *ELEKTRA_PLUGIN_EXPORT
 ```
 
 For further information see [the API documentation](https://doc.libelektra.org/api/current/html/group__plugin.html).
+
+### `elektraPluginGetGlobalKeySet`
+
+In order to enable communication between plugins which is more complex than what can be done with metadata, Elektra provides a global keyset which plugins can read from and modify.
+
+The keyset is initialized and closed by a KDB handle and can be accessed by all plugins of a single handle except for plugins created manually (e.g. with `elektraPluginOpen`). It is not shared between different KDB handles.
+
+It can be accessed by calling the `elektraPluginGetGlobalKeySet` function, which returns a handle to the global keyset.
+
+Plugins using the global keyset are responsible for cleaning up the parts of the keyset they no longer need.
 
 ## Note on Direct Method Calls via External Integrations
 
